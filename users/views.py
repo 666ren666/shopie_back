@@ -2,7 +2,6 @@ from django.contrib.auth import login, logout
 from rest_framework import permissions
 from rest_framework import views, status
 from rest_framework.response import Response
-
 from . import serializers
 
 class LoginView(views.APIView):
@@ -18,7 +17,6 @@ class LoginView(views.APIView):
         login(request, user)
         return Response({'session':request.session.session_key}, status=status.HTTP_202_ACCEPTED)
 
-
 class LogoutView(views.APIView):
     permission_classes = (permissions.AllowAny,)
     def get(self, request, format=None):
@@ -27,3 +25,6 @@ class LogoutView(views.APIView):
         response.set_cookie('sessionid',max_age=1,samesite='None')
         response.set_cookie('csrftoken',max_age=1,samesite='None')
         return response
+
+
+

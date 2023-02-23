@@ -21,13 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# if 'RENDER' in os.environ:
-#     SECRET_KEY = os.environ.get("SECRET_KEY")
-#     DB_PASSWORD = os.environ.get("DB_PASS") 
-# else:
-#     SECRET_KEY = 'django-insecure-e#e@ffr+ej_1hq%li4!w13r0c(k)5p_*j_l8zc)hwvq^17wp!k'
-#     DB_PASSWORD = ""
-SECRET_KEY = 'django-insecure-&_6&ac%ric_%nebz*1y+70nq$zf2bs25#dq4-v&k5x__q3ubid'
+if 'RENDER' in os.environ:
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+    DB_PASSWORD = os.environ.get("DB_PASS") 
+else:
+    SECRET_KEY = 'django-insecure-e#e@ffr+ej_1hq%li4!w13r0c(k)5p_*j_l8zc)hwvq^17wp!k'
+    DB_PASSWORD = ""
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -48,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'product',
+    'shopper',
     'rest_framework',
     'whitenoise.runserver_nostatic',
     "corsheaders",
@@ -91,24 +91,24 @@ WSGI_APPLICATION = 'shopping.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 #if 'RENDER' in os.environ:
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'shopping_db',
-        'USER': 'shopping_db_user',
-        'PASSWORD': 'gbuNAzAccVPjyZtqPESeqj0ki93FPGOe',
-        # 'HOST': 'dpg-cf422dmn6mps0qnc92pg-a',
-        'HOST': 'dpg-cf422dmn6mps0qnc92pg-a.frankfurt-postgres.render.com',        
-        'PORT': '5432',
-    }
-}
-#els#
 # DATABASES = {
-#            'default': {
-#            'ENGINE': 'django.db.backends.sqlite3',
-#            'NAME': BASE_DIR / 'db.sqlite3',
-#        }
-#    }
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'shopping_db',
+#         'USER': 'shopping_db_user',
+#         'PASSWORD': 'gbuNAzAccVPjyZtqPESeqj0ki93FPGOe',
+#         # 'HOST': 'dpg-cf422dmn6mps0qnc92pg-a',
+#         'HOST': 'dpg-cf422dmn6mps0qnc92pg-a.frankfurt-postgres.render.com',        
+#         'PORT': '5432',
+#     }
+# }
+#els#
+DATABASES = {
+           'default': {
+           'ENGINE': 'django.db.backends.sqlite3',
+           'NAME': BASE_DIR / 'db.sqlite3',
+       }
+   }
 
 
 
@@ -156,11 +156,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/images/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
-
+STATICFILES_DIRS = [ BASE_DIR / 'static',]
 MEDIA_ROOT = BASE_DIR / 'staticfiles/images'
+
+
+
 # STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 CORS_ALLOWED_ORIGINS = [
@@ -168,7 +168,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "http://localhost:8000",
-    "https://shopie_react.onrender.com",
+    # "https://shopie_react.onrender.com",
     
 ]
 
@@ -183,13 +183,23 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ],
 }
 
 
 # settings.py
 CORS_ALLOW_ORIGIN = '*'
-CSRF_COOKIE_HTTPONLY = True
+# CSRF_COOKIE_HTTPONLY = True
+
+# CSRF_COOKIE_NAME = 'csrfcookie'
+
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = False
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
